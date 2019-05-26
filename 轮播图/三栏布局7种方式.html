@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .bottom {
+            width: 300px;
+            height: 100px;
+            background: #312465;
+        }
+
+        /* .left {
+            float: left;
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+
+        .right {
+            float: right;
+            width: 200px;
+            height: 200px;
+            background: blue;
+        }
+
+        .main {
+            margin-left: 205px;
+            margin-right: 205px;
+            height: 200px;
+            background: green;
+        } */
+
+
+
+
+
+        /* .main{
+            height: 200px;
+            margin: 0 205px;
+            background: red;
+        }
+        .left{
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            top: 0;
+            left: 0;
+            background: blue;
+        }
+        .right{
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            top: 0;
+            right: 0;
+            background: yellow;
+        } */
+
+
+
+
+
+
+
+        /* .container {
+            display: flex;
+        }
+
+        .main {
+            flex-grow: 1;
+            margin: 0 5px;
+            height: 200px;
+            background: red;
+        }
+
+        .left,
+        .right {
+            width: 200px;
+            height: 200px;
+            background: blue;
+
+        } */
+
+
+
+        /* .container {
+            display: table;
+            width: 100%;
+        }
+
+        .left,
+        .main,
+        .right {
+            display: table-cell;
+        }
+
+        .right,
+        .left {
+            width: 200px;
+            height: 200px;
+            background: yellow;
+        }
+        .main{
+            background: green;
+        } */
+
+
+        /* .container{
+            display: grid;
+            width: 100%;
+            grid-template-rows: 200px;
+            grid-template-columns: 200px auto 200px;
+        }
+        .left,.right{
+            background: red;
+        }
+        .main{
+            margin: 0 5px;
+            background: green;
+        } */
+
+
+
+
+        /* .container{
+            margin-left: 220px;
+            margin-right: 220px;
+        }
+        .main{
+            float: left;
+            width: 100%;
+            height: 200px;
+            background: red;
+        }
+        .left{
+            float: left;
+            width: 200px;
+            height: 200px;
+            margin-left: -100%;
+            background: blue;
+            position: relative;
+            left: -220px;
+        }                                            最垃圾的一种
+        .right{
+            float: left;
+            width: 200px;
+            height: 200px;
+            margin-left: -200px;
+            position: relative;
+            right: -220px;
+            background: yellow;
+        } */
+
+
+
+
+        .main{
+            float: left;
+            width: 100%;
+            height: 200px;
+            background: red;
+        }
+        .left{
+            float: left;
+            width: 200px;
+            height: 200px;
+            margin-left: -100%;
+            background: blue;
+        }                                           
+        .right{
+            float: left;
+            width: 200px;
+            height: 200px;
+            margin-left: -200px;
+            background: yellow;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- 第一种float方法 存在的缺点，dom结构限制左右中，主要内容无法最先加载-->
+    <!-- <div class="container">
+        <div class="left"></div>
+        <div class="right"></div>
+        <div class="main"></div>
+    </div> -->
+    <!-- 第二种绝对定位，缺点脱离了文档流，导致子元素必须脱离文档流，高度位置会出现问题 -->
+    <!-- <div class="container">
+        <div class="main"></div>
+        <div class="right"></div>
+        <div class="left"></div>
+    </div> -->
+    <!-- 第三种flex布局 -->
+    <!-- 第四种表格布局，缺点无法设置栏边距，左中右模块无间隔，对SEO不够友好，当一个格高度增加，其余的格也会被动增加高度 -->
+    <!-- 第五种网格布局grid 缺点兼容性不强高度未知的情况下会出现问题 -->
+    <!-- <div class="container">
+        <div class="left"></div>
+        <div class="main"></div>
+        <div class="right"></div>
+    </div> -->
+    <!-- 第六种圣杯布局，dom结构为中左右 -->
+    <!-- <div class="container">
+        <div class="main"></div>
+        <div class="left"></div>
+        <div class="right"></div>
+    </div> -->
+    <!-- 第七种双飞翼布局，上一个的升级版 -->
+    <div class="container">
+        <div class="main">444
+            <div class="content">1233</div>
+        </div>
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+</body>
+
+</html>

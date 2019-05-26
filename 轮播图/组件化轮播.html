@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>原生轮播图</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        html,
+        body {
+            user-select: none;
+            background: #d5f59c;
+        }
+
+        .wrap {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            border: 10px dashed purple;
+            margin: 100px auto;
+            overflow: hidden;
+        }
+
+        .imgs {
+            width: 5600px;
+            height: 100%;
+            transform: translateX(-800px);
+        }
+
+        .imgs li {
+            float: left;
+            width: 800px;
+            height: 100%;
+        }
+
+        .imgs li img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*btns样式*/
+        .btns {
+            z-index: 10;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20px;
+            width: 140px;
+            height: 20px;
+        }
+
+        .btns li {
+            float: left;
+            margin-right: 10px;
+            width: 20px;
+            height: 100%;
+            border-radius: 50%;
+            font-size: 14px;
+            text-align: center;
+            line-height: 20px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .btns li:last-of-type {
+            margin-right: 0;
+        }
+
+        .active {
+            background: red !important;
+        }
+
+        /*arrows样式*/
+        .arrow {
+            z-index: 10;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 60px;
+            background: rgba(0, 0, 0, .5);
+            color: white;
+            font-size: 40px;
+            line-height: 60px;
+            text-align: center;
+            cursor: pointer;
+            display: none;
+        }
+
+        .wrap:hover .arrow {
+            display: block;
+        }
+
+        .arrow_l {
+            left: 0;
+        }
+
+        .arrow_r {
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrap">
+        <ul class="imgs">
+            <li>
+                <img src="../source/image/05.jpg" alt="">
+            </li>
+            <li>
+                <img src="../source/image/01.jpg" alt="">
+            </li>
+            <li>
+                <img src="../source/image/02.jpg" alt="">
+            </li>
+            <li>
+                <img src="../source/image/03.jpg" alt="">
+            </li>
+            <li>
+                <img src="../source/image/04.jpg" alt="">
+            </li>
+            <li>
+                <img src="../source/image/05.jpg" alt="">
+            </li>
+            <li>
+                <img src="../source/image/01.jpg" alt="">
+            </li>
+        </ul>
+        <ul class="btns">
+            <li class="active">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+        <div class="arrow arrow_l">&lt;</div>
+        <div class="arrow arrow_r">&gt;</div>
+    </div>
+
+
+    <script>
+        let carousel = (wrap, box, btn, arrow, gap, time, len, length) => {
+            let obj = {
+                wrap: document.getElementsByClassName(wrap)[0],
+                box: document.getElementsByClassName(box)[0],
+                btns: document.querySelectorAll(".btns > li"),
+                arrows: document.querySelectorAll(".arrow"),
+                time: time,
+                len: len,
+                num: 1,
+                idx: 0,
+                gap: gap,
+                length: length,
+                timer() {
+                    let len = this.len;
+                    return setInterval(() => {
+                        this.num++;
+                        this.idx++;
+                        if (this.idx >= len) {
+                            this.idx = 0;
+                        }
+                        this.addTransition();
+                        this.addTransform(this.num);
+                        this.setPoint(this.idx);
+                    }, this.gap)
+                },
+                addTransform(index) {
+                    this.box.style.transform = `translateX(${-index * length}px)`;
+                },
+                addTransition() {
+                    this.box.style.transition = `${this.time}s`;
+                },
+                removeTransition() {
+                    this.box.style.transition = "none";
+                },
+                setPoint(index) {
+                    let len = this.btns.length;
+                    for (let i = 0; i < len; i++) {
+                        this.btns[i].classList.remove("active");
+                    }
+                    this.btns[index].classList.add("active");
+                }
+            }
+
+            // timer实现基本轮播效果
+            let timer = obj.timer();
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState == "hidden") {
+                    clearInterval(timer);
+                } else {
+                    timer = obj.timer();
+                }
+            }, false);
+
+            // 实现循环无缝连接
+            obj.box.addEventListener("transitionend", () => {
+                let len = obj.len;
+                let num = obj.num;
+                if (num >= len + 1) {
+                    obj.num = 1;
+                    obj.removeTransition();
+                    obj.addTransform(obj.num);
+                } else if (num <= 0) {
+                    obj.num = len;
+                    obj.removeTransition();
+                    obj.addTransform(obj.num);
+                }
+            })
+
+            // btns上面的点击事件
+            Array.from(obj.btns).forEach((item, index) => {
+                item.addEventListener("click", () => {
+                    obj.idx = index;
+                    obj.num = index + 1;
+                    obj.addTransition();
+                    obj.addTransform(obj.num);
+                    obj.setPoint(index);
+                }, false)
+            });
+
+            // 鼠标进入暂停
+            obj.wrap.addEventListener("mouseenter", () => {
+                clearInterval(timer)
+            }, false)
+
+            obj.wrap.addEventListener("mouseleave", () => {
+                timer = obj.timer();
+            }, false)
+
+            // arrows上的事件
+            let time1 = Date.now();
+            obj.arrows[0].addEventListener("click", () => {
+                let time2 = Date.now();
+                if (!(time2 - time1 < 300)) {
+                    obj.num--;
+                    obj.idx--;
+                }
+
+                if (obj.idx <= -1) {
+                    obj.idx = obj.len - 1;
+                }
+                obj.addTransition();
+                obj.addTransform(obj.num);
+                obj.setPoint(obj.idx);
+                time1 = time2;
+            }, false)
+
+            obj.arrows[1].addEventListener("click", () => {
+                let time3 = Date.now();
+                if (!(time3 - time1 < 300)) {
+                    obj.num++;
+                    obj.idx++;
+                }
+
+                if (obj.idx >= len) {
+                    obj.idx = 0;
+                }
+                if (obj.num > len + 1) {
+                    obj.num = 1;
+                    obj.removeTransition();
+                } else {
+                    obj.addTransition();
+                }
+                obj.addTransform(obj.num);
+                obj.setPoint(obj.idx);
+                time1 = time3;
+
+            }, false)
+        }
+        /*
+            carousel函数的参数介绍 :
+                1. wrap   : 整个轮播图的外部容器的类名
+                2. box    : 装载全部imgs的ul的类名
+                3. btn    : 按钮的ul的类名
+                4. arrow  : 左右箭头的div的类名(包含左右两个div)
+                5. gap    : 定时器的间隔时间
+                6. time   : 过渡时间
+                7. len    : imgs的张数
+                8. length : 每张图片的width
+        */
+        carousel("wrap", "imgs", "btns", "arrows", 2000, 0.3, 5, 800);
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
